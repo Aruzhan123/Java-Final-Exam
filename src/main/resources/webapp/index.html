@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html ng-app="aitu-project">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Product List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css"/>
+    <script src="https://code.angularjs.org/1.5.8/angular.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<body ng-controller="ProductCtrl">
+
+<div class="container">
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <button id="contentProduct" class="btn btn-outline-success" type="button">Products</button>
+            <button id="contentOrder" class="btn btn-outline-success" type="button">Order</button>
+        </form>
+    </nav>
+    <hr>
+    <div id="content">
+        <h1>Login</h1>
+        <br>
+
+        <div class="row">
+            <div class="row">
+                <div class="col-lg-6">
+                    <input ng-model="auth.login" type="text" placeholder="enter login"
+                           class="form-control form-control-lg inverse-mode"/><br>
+                    <input ng-model="auth.password" type="password"
+                           class="form-control form-control-lg inverse-mode"/><br>
+                    <div class="login-buttons">
+                        <button id="hideContent" ng-click="login(auth)" type="button"
+                                class="btn btn-success btn-block btn-lg">Войти
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="showContent" style="display: none;">
+        <h1>Hello {{customer.name}}</h1>
+
+        <h2>Customer Info</h2>
+
+        <h3>Customer name: {{customer.name}}</h3>
+        <h3>Customer description: {{customer.description}}</h3>
+        <h3>Customer phone: {{customer.phone}}</h3>
+        <h3>Customer email: {{customer.email}}</h3>
+        <h3>Total Price: {{totalPrice}} </h3>
+    </div>
+    <br>
+
+
+    <div id="showProduct" style="display: none;">
+        <hr>
+        <h3>Product List</h3>
+        <br>
+        <div class="row">
+            <div class="col-log-12">
+                <div id="options" class="m-b-10">
+                        <span class="gallery-option-set" id="filter" data-option-key="filter">
+                            <a class="btn btn-outline-success btn-block btn-lg" ng-repeat="category in categoryList"
+                               ng-click="getProductsByCategory(category.id)">{{category.name}}</a>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <th>Add</th>
+                <th>Delete</th>
+                <th>ID</th>
+                <th>name</th>
+                <th>description</th>
+                <th>price</th>
+                <th>categoryID</th>
+                </thead>
+                <tr ng-repeat="product in productList | orderBy: 'id'">
+                    <td ng-click="incrementProduct(product);">
+                        <button class="btn  btn-success btn-md"> ADD</button>
+                    </td>
+                    <td ng-click="deleteProduct(product)">
+                        <button class="btn btn-danger btn-md"> DELETE</button>
+                    </td>
+                    <td ng-bind="product.id"></td>
+                    <td ng-bind="product.name"></td>
+                    <td ng-bind="product.description"></td>
+                    <td ng-bind="product.price"></td>
+                    <td ng-bind="product.categoryId"></td>
+                </tr>
+            </table>
+            <button ng-click="insertCustomerOrder();getCustomerOrderId();insertOrderItem();FindTotalPrice()"
+                    id="sendOrder" type="button"
+                    class="btn btn-primary btn-block btn-lg">Отправить
+                заказ
+            </button>
+        </div>
+    </div>
+
+    <br>
+    <div id="bucket" style="display: none;">
+        <h3>Customer bucket</h3>
+        <br>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            </thead>
+            <tr ng-repeat="product in bucket">
+                <td ng-bind="product.name"></td>
+                <td ng-bind="product.description"></td>
+                <td ng-bind="product.price"></td>
+                <td ng-bind="product.quantity"></td>
+
+            </tr>
+
+        </table>
+    </div>
+
+    <br>
+    <div id="showOrder" style="display: none;">
+        <div class="row">
+            <h3>Customer orders</h3>
+            <br>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <th>ID</th>
+                <th>Total Price</th>
+                <th>status</th>
+                </thead>
+                <tr ng-repeat="order in orderList | orderBy: 'id'">
+                    <td ng-bind="order.id"></td>
+                    <td ng-bind="order.totalPrice"></td>
+                    <td ng-bind="order.status"></td>
+                </tr>
+            </table>
+        </div>
+        <button ng-click="getCustomerOrder()" type="button" class="btn btn-primary btn-block btn-lg">заказы</button>
+    </div>
+</div>
+<script>
+    let content = document.getElementById("content")
+    let show = document.getElementById("showContent")
+    let hide = document.getElementById("hideContent")
+    let contentProduct = document.getElementById("contentProduct")
+    let showProduct = document.getElementById("showProduct")
+    let sendOrder = document.getElementById("sendOrder")
+    let bucket = document.getElementById("bucket")
+    let showOrder = document.getElementById("showOrder")
+    let contentOrder = document.getElementById("contentOrder")
+
+    contentOrder.addEventListener("click", () => {
+        showOrder.style.display = "block"
+    })
+
+    sendOrder.addEventListener("click", () => {
+        bucket.style.display = "block"
+    })
+    contentProduct.addEventListener("click", () => {
+        showProduct.style.display = "block"
+    })
+
+
+    show.addEventListener("click", () => {
+        content.style.display = "block"
+    })
+
+    hide.addEventListener("click", () => {
+        content.style.display = "none"
+        show.style.display = "block"
+    })
+</script>
+</body>
+
+</html>
